@@ -4,9 +4,10 @@ import torch
 
 
 class BatchType(Enum):
-    smart = 1
-    hard = 2
-    dumb = 3
+    clever = 1
+    industrious = 2
+    birdbrain = 3
+    smartest = 4
 
 
 hidden_dim = 4096
@@ -17,4 +18,4 @@ num_layers = 70
 lambda_param = 2e-2
 seed = 42
 dtype = torch.float16
-batching_type = BatchType.dumb
+batching_type = BatchType.birdbrain

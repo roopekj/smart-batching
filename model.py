@@ -1,9 +1,7 @@
 import math
 
-import numpy as np
 import torch
 from torch import Tensor
-from torch.nn import attention
 from torch.nn import functional as F
 
 from settings import dtype, hidden_dim, num_layers, vocab_size

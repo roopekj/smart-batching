@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 fontsize = 24
-types = {"smart": ["g", 0.3], "hard": ["b", 0.2], "dumb": ["r", 0.1]}
+types = {"clever": ["g", 0.3], "industrious": ["b", 0.2], "birdbrained": ["r", 0.1]}
 for batch_type, (color, opacity) in types.items():
     with open("batch_sizes/%s.pickle" % batch_type, "rb") as f:
         data = pickle.load(f)
@@ -15,7 +15,7 @@ for batch_type, (color, opacity) in types.items():
 
 plt.xlabel("Batch", fontsize=fontsize)
 plt.ylabel("Matrix dimension", fontsize=fontsize)
-plt.title("Matrix dimensions for each batch", fontsize=fontsize)
+plt.title("Matrix dimensions for batches", fontsize=fontsize)
 plt.legend(fontsize=fontsize)
 plt.grid()
 plt.show()

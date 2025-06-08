@@ -1,12 +1,7 @@
-import pickle
 from random import choices
 
-import numpy as np
-import torch
-from torch import Tensor
-
 from model import WhateverModel
-from settings import batch_size, hidden_dim, num_docs, vocab_size
+from settings import batch_size, num_docs, vocab_size
 
 
 def generate_documents(doc_lengths):
@@ -33,7 +28,7 @@ def pad_documents(model: WhateverModel, documents: list[list[int]]) -> list[list
     return output
 
 
-def batch_dumb(model: WhateverModel, documents: list[list[int]]):
+def batch_birdbrained(model: WhateverModel, documents: list[list[int]]):
     sentiments = []
 
     documents = pad_documents(model, documents)
@@ -46,7 +41,7 @@ def batch_dumb(model: WhateverModel, documents: list[list[int]]):
     return sentiments
 
 
-def batch_hard(model: WhateverModel, documents: list[list[int]]):
+def batch_industrious(model: WhateverModel, documents: list[list[int]]):
     sentiments = []
 
     for batch_start in range(0, num_docs, batch_size):
@@ -59,7 +54,7 @@ def batch_hard(model: WhateverModel, documents: list[list[int]]):
     return sentiments
 
 
-def batch_smart(model: WhateverModel, documents: list[list[int]]):
+def batch_clever(model: WhateverModel, documents: list[list[int]]):
     sentiments = []
     documents.sort(key=lambda x: len(x))
 
@@ -69,5 +64,41 @@ def batch_smart(model: WhateverModel, documents: list[list[int]]):
 
         # Forward pass of the model
         sentiments.extend(model.forward(batch))
+
+    return sentiments
+
+
+def batch_smartest(model: WhateverModel, documents: list[list[int]]):
+    sentiments = []
+    documents.sort(key=lambda x: len(x))
+
+    max_tokens_per_batch = 21000
+    max_length_diff_within_batch = 8
+
+    batch_start = 0
+    curr_index = 0
+    while curr_index < num_docs:
+        curr_batch_tokens = 0
+        curr_batch_min_length = len(documents[batch_start])
+
+        batch = []
+        while curr_index < num_docs:
+            next_doc_len = len(documents[curr_index])
+            if (
+                next_doc_len - curr_batch_min_length > max_length_diff_within_batch
+                or curr_batch_tokens + next_doc_len > max_tokens_per_batch
+            ):
+                break
+
+            curr_batch_tokens += len(documents[curr_index])
+            curr_index += 1
+
+        batch = documents[batch_start:curr_index]
+        batch = pad_documents(model, batch)
+
+        # Forward pass of the model
+        sentiments.extend(model.forward(batch))
+
+        batch_start = curr_index
 
     return sentiments
